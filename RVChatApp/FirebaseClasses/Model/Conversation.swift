@@ -50,7 +50,7 @@ public struct LatestMessageInChat: Hashable {
     public var subtext: String?
 
     var isMyMessage: Bool {
-        SessionManager.currentUser?.displayName == senderName
+        SessionManager.currentUser?.name == senderName
     }
 }
 /*

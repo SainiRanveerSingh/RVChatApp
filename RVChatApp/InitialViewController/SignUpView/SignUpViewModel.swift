@@ -8,15 +8,18 @@
 import Foundation
 import Combine
 
-class SignUpViewModel: ObservableObject {
+final class SignUpViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var email: String = ""
     @Published var username: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
     
-    @Published var errorMessage: String?
+    @Published var errorMessage: String = ""
     @Published var isSignedUp: Bool = false // trigger navigation or success actions
+    @Published var isSignUpInfoInvalid: Bool = false
+    
+    
     
     // MARK: - Validation Computed Properties
     var isEmailValid: Bool {
@@ -35,30 +38,17 @@ class SignUpViewModel: ObservableObject {
     // MARK: - Sign Up Action
     func signUp(completion: @escaping ((String?) -> Void)) {
         guard isFormValid else {
-            errorMessage = "Please fill all fields correctly."
+            errorMessage = ErrorMessages.correctInformation
+            self.isSignUpInfoInvalid = true
             return
         }
-        checkIfUserAlreadyExists { status in
-            if !status {
-                self.signUpUser { message in
-                    completion(message)
-                }
-            } else {
-                completion(ErrorMessages.alreadyRegistered)
-            }
+        
+        self.signUpUser { message in
+            self.isSignedUp = true
+            completion(message)
         }
        
     }
-    
-    /*
-     
-     // Simulate sign-up logic (normally call an API)
-     print("Signing up with Email: \(email), Username: \(username)")
-     
-     // After success
-     isSignedUp = true
-     
-    */
     
     func checkIfUserAlreadyExists(completion: @escaping ((Bool) -> Void)) {
         FirebaseHelper.doesUsernameExists(username: username) { (exists) in
@@ -80,10 +70,16 @@ class SignUpViewModel: ObservableObject {
             if status {
                 print(ErrorMessages.verificationMailSent)
                 self.isSignedUp = true
+                self.email = ""
+                self.username = ""
+                self.password = ""
+                self.confirmPassword = ""
                 completion(ErrorMessages.accountCreatedVerifyYourAccount)
             } else {
                 print(message)
-                completion(ErrorMessages.responseErrorTryAgain)
+                self.isSignUpInfoInvalid = true
+                self.errorMessage = message
+                completion(message)
             }
         }
     }

@@ -17,18 +17,18 @@ class SessionManager {
     static let shared = SessionManager()
     
     static var currentUserId: String {
-        shared.currentUser?.uid ?? ""
+        shared.currentFBUser?.id ?? ""
     }
 
-    static var currentUser: User? {
-        shared.currentUser
+    static var currentUser: FBUser? {
+        shared.currentFBUser
     }
 
     var deviceId: String {
         UIDevice.current.identifierForVendor?.uuidString ?? ""
     }
 
-    @Published private var currentUser: User?
+    //@Published private var currentUser: User?
     @Published private var currentFBUser : FBUser?// = FBUser(id: "", name: "", avatarURL: nil, isCurrentUser: false)
 
     func storeUser(_ user: User) {
@@ -39,17 +39,17 @@ class SessionManager {
         }
         UserDefaults.standard.set(true, forKey: hasCurrentSessionKey)
         currentFBUser = FBUser
-        currentUser = user
     }
 
-    func loadUser() {
+    func loadUser() -> (Bool){
         if let data = UserDefaults.standard.data(forKey: "currentUser") {
             currentFBUser = try? JSONDecoder().decode(FBUser.self, from: data)
+            return true
         }
+        return false
     }
 
     func logout() {
-        currentUser = nil
         currentFBUser = nil
         UserDefaults.standard.set(false, forKey: hasCurrentSessionKey)
         UserDefaults.standard.removeObject(forKey: currentUserKey)

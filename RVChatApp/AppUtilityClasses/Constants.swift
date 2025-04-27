@@ -28,6 +28,7 @@ struct ErrorMessages {
     static let wrongPassword        = "Invalid password."
     static let userDeleted          = "This account is deleted."
     static let userBlocked          = "This account is blocked."
+    static let correctInformation   = "Please fill all fields correctly."
     
     //MARK:- Registration -
     static let checkAcceptTandC             = "Please check and accept the Terms and Condition."

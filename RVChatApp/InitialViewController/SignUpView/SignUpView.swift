@@ -33,8 +33,8 @@ struct SignUpView: View {
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(10)
                     
-                    if let error = viewModel.errorMessage {
-                        Text(error)
+                    if viewModel.errorMessage != "" {
+                        Text(viewModel.errorMessage)
                             .foregroundColor(.red)
                             .font(.footnote)
                     }
@@ -63,6 +63,13 @@ struct SignUpView: View {
                     Alert(
                         title: Text("Account created successfully!"),
                         message: Text(ErrorMessages.accountCreatedVerifyYourAccount),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+                .alert(isPresented: $viewModel.isSignUpInfoInvalid) {
+                    Alert(
+                        title: Text("Error in Sign Up"),
+                        message: Text(viewModel.errorMessage),
                         dismissButton: .default(Text("OK"))
                     )
                 }

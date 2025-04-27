@@ -13,6 +13,7 @@ struct ForgotPasswordView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var isSuccess = false // Track if password reset was successful
+    @StateObject private var viewModel = ForgotPasswordViewModel()
     
     var body: some View {
         NavigationStack {
@@ -34,8 +35,9 @@ struct ForgotPasswordView: View {
                     .cornerRadius(10)
                 
                 Button(action: {
-                    if isValidEmail(email) {
+                    if viewModel.isValidEmail(email) {
                         alertMessage = "An email has been sent to \(email) with instructions to reset your password."
+                        email = ""
                         isSuccess = true
                     } else {
                         alertMessage = "Please enter a valid email address."
@@ -59,7 +61,7 @@ struct ForgotPasswordView: View {
             .alert("Password Reset", isPresented: $showAlert, actions: {
                 Button("OK", role: .cancel) {
                     if isSuccess {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             dismiss() // Go back after 2 seconds
                         }
                     }
@@ -70,11 +72,7 @@ struct ForgotPasswordView: View {
         }
     }
     
-    // MARK: - Email Validation Helper
-    func isValidEmail(_ email: String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        return NSPredicate(format: "SELF MATCHES %@", emailRegEx).evaluate(with: email)
-    }
+    
 }
 
 #Preview {

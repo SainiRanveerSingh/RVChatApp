@@ -18,6 +18,7 @@ struct LoginView: View {
     
     var body: some View {
         VStack(spacing: 20) {
+            Spacer()
             Text("RV Chat App")
                 .font(.largeTitle)
                 .fontWeight(.bold)
@@ -49,7 +50,7 @@ struct LoginView: View {
             Button(action: {
                 print("Sign In Tapped with email: \(viewModel.email), password: \(viewModel.password)")
                 viewModel.login { status in
-                    print(status ?? "User Login Stauts")
+                    print(status ?? "User Login Status")
                 }
                 //showChatView = true
             }) {
@@ -63,7 +64,6 @@ struct LoginView: View {
             .padding(.top)
             
             
-            Spacer()
             
             HStack {
                 Text("Don't have an account?")
@@ -76,11 +76,13 @@ struct LoginView: View {
                 }
             }
             .font(.footnote)
+            Spacer()
         }
         .padding()
         .navigationBarBackButtonHidden(true)
         // Navigation trigger
         .navigationDestination(isPresented: $viewModel.isLoggedIn) {
+            
             ChatView(userId: SessionManager.currentUserId)
                 .navigationBarBackButtonHidden(true)
         }
@@ -90,16 +92,13 @@ struct LoginView: View {
         .navigationDestination(isPresented: $showForgetPasswordView) {
             ForgotPasswordView()
         }
-        /*
-        NavigationLink(
-            destination: ChatView(userId: SessionManager.currentUserId)
-                .navigationBarBackButtonHidden(true),
-            isActive: $showChatView
-        ) {
-            EmptyView()
+        .alert(isPresented: $viewModel.isInvalidUser) {
+            Alert(
+                title: Text("Invalid Credentials!"),
+                message: Text(self.viewModel.errorMessage ?? ErrorMessages.checkUserNameEmail),
+                dismissButton: .default(Text("OK"))
+            )
         }
-        */
-        //---
     }
 }
 
