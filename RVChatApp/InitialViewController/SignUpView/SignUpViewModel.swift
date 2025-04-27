@@ -19,7 +19,7 @@ final class SignUpViewModel: ObservableObject {
     @Published var isSignedUp: Bool = false // trigger navigation or success actions
     @Published var isSignUpInfoInvalid: Bool = false
     
-    
+    @Published var isLoading: Bool = false
     
     // MARK: - Validation Computed Properties
     var isEmailValid: Bool {
@@ -42,9 +42,9 @@ final class SignUpViewModel: ObservableObject {
             self.isSignUpInfoInvalid = true
             return
         }
-        
+        isLoading = true
         self.signUpUser { message in
-            self.isSignedUp = true
+            self.isLoading = false
             completion(message)
         }
        
@@ -70,13 +70,16 @@ final class SignUpViewModel: ObservableObject {
             if status {
                 print(ErrorMessages.verificationMailSent)
                 self.isSignedUp = true
+                
                 self.email = ""
                 self.username = ""
                 self.password = ""
                 self.confirmPassword = ""
+                self.errorMessage = ""
                 completion(ErrorMessages.accountCreatedVerifyYourAccount)
             } else {
                 print(message)
+                self.isSignedUp = false
                 self.isSignUpInfoInvalid = true
                 self.errorMessage = message
                 completion(message)

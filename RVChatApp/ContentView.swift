@@ -16,6 +16,7 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     @State private var navigateToLogin = false
+    @State private var navigateToHome = false
     var body: some View {
         NavigationStack {
             VStack {
@@ -24,12 +25,22 @@ struct ContentView: View {
                     .padding()
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                    navigateToLogin = true
+                let userStatus = SessionManager.shared.loadUser()
+                if userStatus {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        navigateToHome = true
+                    }
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        navigateToLogin = true
+                    }
                 }
             }
             .navigationDestination(isPresented: $navigateToLogin) {
                 LoginView()
+            }
+            .navigationDestination(isPresented: $navigateToHome) {
+                HomeScreenView()
             }
         }
         

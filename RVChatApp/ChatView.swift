@@ -51,11 +51,14 @@ struct ChatView: View {
             }
             .padding()
         }
-        .navigationBarBackButtonHidden(true) 
+        //.navigationBarBackButtonHidden(true)
+        /*
         .navigationBarItems(trailing: Button("Logout") {
             // handle logout logic
+            FirebaseHelper.signOutUser()
             self.presentation.wrappedValue.dismiss()
         })
+        */
     }
 }
 

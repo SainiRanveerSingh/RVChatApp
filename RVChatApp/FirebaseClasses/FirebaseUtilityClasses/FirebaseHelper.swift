@@ -10,9 +10,13 @@ import Firebase
 import FirebaseAuth
 
 
+
+
 var currentFBUser : AuthDataResult!
 class FirebaseHelper {
     static let db = Firestore.firestore()
+    //static var appUsers :[(userId:String,strUserName:String)] = []
+    static var allAppUsers = [AllAppUsers]()
     
     static func doesUsernameExists(username: String, completionHandler: @escaping ((Bool) -> Void)) {
         db.collection("users").document(username).getDocument { (document, _) in
@@ -48,22 +52,44 @@ class FirebaseHelper {
         }
     }
     
+    class func getUserNameFromDB(userId: String, completion: @escaping (Bool, String) -> Swift.Void) async {
+        do {
+            let dbData = try await db.collection("users").document(userId).getDocument()
+            print(dbData)
+            guard let name = dbData.data()?["username"] as? String else {
+                completion(false, "Error")
+                return
+            }
+            completion(true, name)
+        }
+        catch(let error) {
+            print(error.localizedDescription)
+            completion(false, "Error")
+        }
+    }
+    
     class func login(email: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 completion(.failure(error))
             } else if let user = authResult?.user {
                 currentFBUser = authResult
-                SessionManager.shared.storeUser(currentFBUser.user)
-                self.checkLoggrdInUserExists(userId: currentFBUser.user.uid) { status in
+                Task {
+                    await SessionManager.shared.storeUser(currentFBUser.user)
+                }
+                self.checkLoggedInUserExists(userId: currentFBUser.user.uid) { status in
                     if status {
-                        completion(.success(user.uid))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            completion(.success(user.uid))
+                        }
                     } else {
                         self.addLoggedInUserDetails { errorMessage in
                             if errorMessage != nil {
                                 print(errorMessage ?? "Some error in adding Logged In user Data")
                             }
-                            completion(.success(user.uid))
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                completion(.success(user.uid))
+                            }
                         }
                     }
                 }
@@ -71,7 +97,7 @@ class FirebaseHelper {
         }
     }
     
-    static func checkLoggrdInUserExists(userId: String, completionHandler: @escaping ((Bool) -> Void)) {
+    static func checkLoggedInUserExists(userId: String, completionHandler: @escaping ((Bool) -> Void)) {
         db.collection("users").document(userId).getDocument { (document, _) in
             if let document = document, document.exists {
                 completionHandler(true)
@@ -82,7 +108,15 @@ class FirebaseHelper {
     }
     
     static func addLoggedInUserDetails(completionHandler: @escaping ((String?) -> Void)) {
-        let data = ["username": currentFBUser.user.displayName ?? "", "email": currentFBUser.user.email ?? "", "id": currentFBUser.user.uid, "profileImageUrl": currentFBUser.user.photoURL ?? ""] as [String : Any]
+        var username = currentFBUser.user.email ?? ""
+        if username != "" {
+            let stringValue = username.split(separator: "@")
+            if stringValue.count > 1 {
+                username = String(stringValue[0])
+            }
+        }
+        
+        let data = ["username": currentFBUser.user.displayName ?? username, "email": currentFBUser.user.email ?? "", "id": currentFBUser.user.uid, "profileImageUrl": currentFBUser.user.photoURL ?? ""] as [String : Any]
         db.collection("users").document(currentFBUser.user.uid).setData(data) { (err) in
             if err == nil {
                 completionHandler(nil)
@@ -133,5 +167,30 @@ class FirebaseHelper {
         }
         
     }
+    
+    class func getAllUserList(completion: @escaping (Bool, String) -> Void) async {
+        print(db.collection("users"))
+       
+        db.collection("users").getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot, error == nil else {return}
+            let documentIDs = snapshot.documents.map({$0.documentID})
+            print(documentIDs)
+            documentIDs.forEach { strUserId in
+                Task {
+                    await self.getUserNameFromDB(userId: strUserId) { status, nameValue in
+                        //self.appUsers.append((userId:strUserId,strUserName:nameValue))
+                        
+                        self.allAppUsers.append(AllAppUsers(userId: strUserId, strUserName: nameValue))
+                    }
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                completion(true, "Success")
+            }
+        }
+        
+    }
+    
+    
     
 }

@@ -13,6 +13,7 @@ final class LoginViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isLoggedIn = false
     @Published var isInvalidUser = false
+    @Published var isLoading: Bool = false
 
     // MARK: - Validation Computed Properties
     var isEmailValid: Bool {
@@ -33,7 +34,7 @@ final class LoginViewModel: ObservableObject {
             return
         }
         
-
+        isLoading = true
         FirebaseHelper.login(email: email, password: password) { resultData in
             switch resultData {
             case .success(let value):
@@ -41,10 +42,18 @@ final class LoginViewModel: ObservableObject {
                 self.isLoggedIn = true
                 self.email = ""
                 self.password = ""
+                self.isLoading = false
+                
+                Task {
+                    await FirebaseHelper.getAllUserList { status, messsage in
+                        print(messsage)
+                    }
+                }
                 completion("success")
             case .failure(let error):
                 print(error.localizedDescription)
                 self.isInvalidUser = true
+                self.isLoading = false
                 completion(error.localizedDescription)
             }
         }

@@ -9,69 +9,91 @@ import SwiftUI
 
 struct SignUpView: View {
     @StateObject private var viewModel = SignUpViewModel()
-        
+    @Environment(\.dismiss) private var dismiss // to programmatically go back
         var body: some View {
             NavigationStack {
-                VStack(spacing: 20) {
-                    Text("Create Account")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Group {
-                        TextField("Email Address", text: $viewModel.email)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
+                ZStack{
+                    VStack(spacing: 20) {
+                        Text("Create Account")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
                         
-                        TextField("Username", text: $viewModel.username)
-                            .autocapitalization(.none)
+                        Group {
+                            TextField("Email Address", text: $viewModel.email)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                            
+                            TextField("Username", text: $viewModel.username)
+                                .autocapitalization(.none)
+                            
+                            SecureField("Password", text: $viewModel.password)
+                            
+                            SecureField("Confirm Password", text: $viewModel.confirmPassword)
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(10)
                         
-                        SecureField("Password", text: $viewModel.password)
+                        if viewModel.errorMessage != "" {
+                            Text(viewModel.errorMessage)
+                                .foregroundColor(.red)
+                                .font(.footnote)
+                        }
                         
-                        SecureField("Confirm Password", text: $viewModel.confirmPassword)
+                        Button(action: {
+                            viewModel.signUp { message in
+                                print(message ?? "User Created")
+                            }
+                        }) {
+                            Text("Sign Up")
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(viewModel.isFormValid ? Color.blue : Color.gray)
+                                .cornerRadius(10)
+                        }
+                        .disabled(!viewModel.isFormValid)
+                        .padding(.top)
+                        
+                        Spacer()
                     }
                     .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(10)
+                    .navigationTitle("Sign Up")
+                    .navigationBarTitleDisplayMode(.inline)
                     
-                    if viewModel.errorMessage != "" {
-                        Text(viewModel.errorMessage)
-                            .foregroundColor(.red)
-                            .font(.footnote)
+                    .alert(isPresented: $viewModel.isSignUpInfoInvalid) {
+                        Alert(
+                            title: Text("Error in Sign Up"),
+                            message: Text(viewModel.errorMessage),
+                            dismissButton: .default(Text("OK"))
+                        )
                     }
-                    
-                    Button(action: {
-                        viewModel.signUp { message in
-                            print(message ?? "User Created")
+                    //--
+                    .alert("Account created successfully!", isPresented: $viewModel.isSignedUp, actions: {
+                        Button("OK", role: .cancel) {
+                            if self.viewModel.isSignedUp {
+                                    dismiss()
+                            }
                         }
-                    }) {
-                        Text("Sign Up")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
+                    }, message: {
+                        Text(ErrorMessages.accountCreatedVerifyYourAccount)
+                    })
+                    //--
+                    // Show Progress HUD
+                    if viewModel.isLoading {
+                        ZStack {
+                            Color.black.opacity(0.4).edgesIgnoringSafeArea(.all)
+                            VStack {
+                                ActivityIndicatorView()
+                                Text("Loading...")
+                                    .padding(.top, 8)
+                                    .foregroundColor(.black)
+                            }
                             .padding()
-                            .background(viewModel.isFormValid ? Color.blue : Color.gray)
+                            .background(Color.white)
                             .cornerRadius(10)
+                        }
                     }
-                    .disabled(!viewModel.isFormValid)
-                    .padding(.top)
-                    
-                    Spacer()
-                }
-                .padding()
-                .navigationTitle("Sign Up")
-                .navigationBarTitleDisplayMode(.inline)
-                .alert(isPresented: $viewModel.isSignedUp) {
-                    Alert(
-                        title: Text("Account created successfully!"),
-                        message: Text(ErrorMessages.accountCreatedVerifyYourAccount),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
-                .alert(isPresented: $viewModel.isSignUpInfoInvalid) {
-                    Alert(
-                        title: Text("Error in Sign Up"),
-                        message: Text(viewModel.errorMessage),
-                        dismissButton: .default(Text("OK"))
-                    )
                 }
             }
         }
