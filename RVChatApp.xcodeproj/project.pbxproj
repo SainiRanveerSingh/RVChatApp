@@ -6,6 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		046B7D862DBB5416004CEF89 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 046B7D852DBB5416004CEF89 /* FirebaseCore */; };
+		046B7D882DBB5416004CEF89 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 046B7D872DBB5416004CEF89 /* FirebaseFunctions */; };
+		046B7D8A2DBB5416004CEF89 /* FirebaseFunctionsCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 046B7D892DBB5416004CEF89 /* FirebaseFunctionsCombine-Community */; };
+		046B7D8D2DBB5B30004CEF89 /* ExyteMediaPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 046B7D8C2DBB5B30004CEF89 /* ExyteMediaPicker */; };
+		04C231762DB950530079AC17 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 04C231752DB950530079AC17 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		04C231782DB950530079AC17 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 04C231772DB950530079AC17 /* FirebaseAuth */; };
+		04C2317A2DB950530079AC17 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 04C231792DB950530079AC17 /* FirebaseFirestore */; };
+		04C2317C2DB950530079AC17 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 04C2317B2DB950530079AC17 /* FirebaseMessaging */; };
+		04C2317E2DB950530079AC17 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 04C2317D2DB950530079AC17 /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		04D89BDF2DB8B3C800BFF180 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +41,22 @@
 		04D89BE82DB8B3C800BFF180 /* RVChatAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RVChatAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		042AE6192DBCE32400638979 /* Exceptions for "RVChatApp" folder in "RVChatApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 04D89BC82DB8B3C500BFF180 /* RVChatApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		04D89BCB2DB8B3C500BFF180 /* RVChatApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				042AE6192DBCE32400638979 /* Exceptions for "RVChatApp" folder in "RVChatApp" target */,
+			);
 			path = RVChatApp;
 			sourceTree = "<group>";
 		};
@@ -52,6 +77,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				046B7D8D2DBB5B30004CEF89 /* ExyteMediaPicker in Frameworks */,
+				04C2317C2DB950530079AC17 /* FirebaseMessaging in Frameworks */,
+				046B7D882DBB5416004CEF89 /* FirebaseFunctions in Frameworks */,
+				04C231762DB950530079AC17 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				04C231782DB950530079AC17 /* FirebaseAuth in Frameworks */,
+				04C2317E2DB950530079AC17 /* FirebaseStorage in Frameworks */,
+				046B7D862DBB5416004CEF89 /* FirebaseCore in Frameworks */,
+				04C2317A2DB950530079AC17 /* FirebaseFirestore in Frameworks */,
+				046B7D8A2DBB5416004CEF89 /* FirebaseFunctionsCombine-Community in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +146,15 @@
 			);
 			name = RVChatApp;
 			packageProductDependencies = (
+				04C231752DB950530079AC17 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				04C231772DB950530079AC17 /* FirebaseAuth */,
+				04C231792DB950530079AC17 /* FirebaseFirestore */,
+				04C2317B2DB950530079AC17 /* FirebaseMessaging */,
+				04C2317D2DB950530079AC17 /* FirebaseStorage */,
+				046B7D852DBB5416004CEF89 /* FirebaseCore */,
+				046B7D872DBB5416004CEF89 /* FirebaseFunctions */,
+				046B7D892DBB5416004CEF89 /* FirebaseFunctionsCombine-Community */,
+				046B7D8C2DBB5B30004CEF89 /* ExyteMediaPicker */,
 			);
 			productName = RVChatApp;
 			productReference = 04D89BC92DB8B3C500BFF180 /* RVChatApp.app */;
@@ -195,6 +238,10 @@
 			);
 			mainGroup = 04D89BC02DB8B3C500BFF180;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				046B7D8B2DBB5B30004CEF89 /* XCRemoteSwiftPackageReference "MediaPicker" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 04D89BCA2DB8B3C500BFF180 /* Products */;
 			projectDirPath = "";
@@ -398,11 +445,13 @@
 				DEVELOPMENT_ASSET_PATHS = "\"RVChatApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RVChatApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "RV Chat App";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -426,11 +475,13 @@
 				DEVELOPMENT_ASSET_PATHS = "\"RVChatApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RVChatApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "RV Chat App";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -552,6 +603,73 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		046B7D8B2DBB5B30004CEF89 /* XCRemoteSwiftPackageReference "MediaPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/MediaPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.4;
+			};
+		};
+		04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		046B7D852DBB5416004CEF89 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		046B7D872DBB5416004CEF89 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+		046B7D892DBB5416004CEF89 /* FirebaseFunctionsCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFunctionsCombine-Community";
+		};
+		046B7D8C2DBB5B30004CEF89 /* ExyteMediaPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 046B7D8B2DBB5B30004CEF89 /* XCRemoteSwiftPackageReference "MediaPicker" */;
+			productName = ExyteMediaPicker;
+		};
+		04C231752DB950530079AC17 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		04C231772DB950530079AC17 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		04C231792DB950530079AC17 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		04C2317B2DB950530079AC17 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		04C2317D2DB950530079AC17 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C231742DB950530079AC17 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 04D89BC12DB8B3C500BFF180 /* Project object */;
 }

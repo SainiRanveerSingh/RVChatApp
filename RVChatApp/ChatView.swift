@@ -1,0 +1,64 @@
+//
+//  ChatView.swift
+//  RVChatApp
+//
+//  Created by RV on 25/04/25.
+//
+
+import SwiftUI
+
+struct ChatView: View {
+    @Environment(\.presentationMode) var presentation
+    @StateObject var chatViewModel = ChatViewModel()
+    @State private var messageText = ""
+    let userId: String
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ForEach(chatViewModel.messages) { message in
+                        HStack {
+                            if message.senderId == userId {
+                                Spacer()
+                                Text(message.text)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(10)
+                                    .foregroundColor(.white)
+                                    .padding(.trailing, 10)
+                            } else {
+                                Text(message.text)
+                                    .padding()
+                                    .background(Color.gray)
+                                    .cornerRadius(10)
+                                    .foregroundColor(.white)
+                                    .padding(.leading, 10)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
+            }
+            
+            HStack {
+                TextField("Type a message", text: $messageText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Button("Send") {
+                    chatViewModel.sendMessage(text: messageText, senderId: userId)
+                    messageText = ""
+                }
+            }
+            .padding()
+        }
+        .navigationBarBackButtonHidden(true) 
+        .navigationBarItems(trailing: Button("Logout") {
+            // handle logout logic
+            self.presentation.wrappedValue.dismiss()
+        })
+    }
+}
+
+#Preview {
+    ChatView(userId: "123")
+}

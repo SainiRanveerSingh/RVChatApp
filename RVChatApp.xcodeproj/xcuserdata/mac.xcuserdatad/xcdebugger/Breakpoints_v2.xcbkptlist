@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "65A8BF9B-CFDB-4992-84E2-5A783E6934E1"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4B64E887-5441-4F50-9285-B1A8F171364C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RVChatApp/InitialViewController/SignUpView/SignUpViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "signUpUser(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E530890C-0ACF-4515-9BA9-FFD4F1D8D1B5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RVChatApp/InitialViewController/SignUpView/SignUpViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "signUpUser(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "89628FBD-A2B1-4A79-ADB5-CE7FFADF2A5E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RVChatApp/InitialViewController/SignUpView/SignUpViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "signUpUser(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C698FF1-3763-49AC-8B57-558D99DE3BD8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RVChatApp/FirebaseClasses/FirebaseUtilityClasses/FirebaseHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "registerUserByAuth(username:email:password:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2C698FF1-3763-49AC-8B57-558D99DE3BD8 - 64913ec1c0a1663a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (Swift.Bool, Swift.String) -&gt; () in closure #1 (Swift.Optional&lt;FirebaseAuth.AuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static RVChatApp.FirebaseHelper.registerUserByAuth(username: Swift.String, email: Swift.String, password: Swift.String, completion: (Swift.Bool, Swift.String, Swift.Optional&lt;FirebaseAuth.User&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "RVChatApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Data/RVData/Job%20Applied%20In/Yal_._AI/RVChatApp/GitRepo/RVChatApp/RVChatApp/FirebaseClasses/FirebaseUtilityClasses/FirebaseHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45">
+               </Location>
+               <Location
+                  uuid = "2C698FF1-3763-49AC-8B57-558D99DE3BD8 - 64913ec1c0a1663a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (Swift.Bool, Swift.String) -&gt; () in closure #1 (Swift.Optional&lt;FirebaseAuth.AuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static RVChatApp.FirebaseHelper.registerUserByAuth(username: Swift.String, email: Swift.String, password: Swift.String, completion: (Swift.Bool, Swift.String, Swift.Optional&lt;FirebaseAuth.User&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "RVChatApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Data/RVData/Job%20Applied%20In/Yal_._AI/RVChatApp/GitRepo/RVChatApp/RVChatApp/FirebaseClasses/FirebaseUtilityClasses/FirebaseHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
