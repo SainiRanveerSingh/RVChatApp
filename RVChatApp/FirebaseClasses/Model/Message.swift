@@ -14,4 +14,6 @@ struct Message: Identifiable, Codable {
     var text: String
     var senderId: String
     var timestamp: Date
+    var userName: String
+    var receiverId: String
 }

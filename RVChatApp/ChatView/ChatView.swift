@@ -11,15 +11,16 @@ struct ChatView: View {
     @Environment(\.presentationMode) var presentation
     @StateObject var chatViewModel = ChatViewModel()
     @State private var messageText = ""
-    let userId: String
-    
+    var receiverId: String
+    var userName: String
+
     var body: some View {
         VStack {
             ScrollView {
                 VStack(alignment: .leading) {
                     ForEach(chatViewModel.messages) { message in
                         HStack {
-                            if message.senderId == userId {
+                            if message.senderId == receiverId {
                                 Spacer()
                                 Text(message.text)
                                     .padding()
@@ -40,12 +41,13 @@ struct ChatView: View {
                     }
                 }
             }
+            .padding()
             
             HStack {
                 TextField("Type a message", text: $messageText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button("Send") {
-                    chatViewModel.sendMessage(text: messageText, senderId: userId)
+                    chatViewModel.sendMessage(text: messageText, receiverId: receiverId, userName: userName)
                     messageText = ""
                 }
             }
@@ -63,5 +65,5 @@ struct ChatView: View {
 }
 
 #Preview {
-    ChatView(userId: "123")
+    ChatView(receiverId: "123", userName: "User")
 }

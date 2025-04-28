@@ -17,8 +17,8 @@ class ChatViewModel: ObservableObject {
         fetchMessages()
     }
     
-    func sendMessage(text: String, senderId: String) {
-        let newMessage = Message(text: text, senderId: senderId, timestamp: Date())
+    func sendMessage(text: String, receiverId: String, userName: String) {
+        let newMessage = Message(text: text, senderId: SessionManager.currentUserId, timestamp: Date(), userName: userName, receiverId: receiverId)
         
         do {
             _ = try db.collection("messages").addDocument(from: newMessage)
