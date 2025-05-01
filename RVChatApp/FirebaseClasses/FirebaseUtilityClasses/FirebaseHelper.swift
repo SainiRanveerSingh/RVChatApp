@@ -191,6 +191,36 @@ class FirebaseHelper {
         
     }
     
+    class func checkUserChatExists(chatId: String, senderId: String, receiverId: String, completionHandler: @escaping ((_ status:Bool, _ chatId: String) -> Void)) {
+        let chatId01 = String(format: "%@:%@", senderId, receiverId)
+        let chatId02 = String(format: "%@:%@", receiverId, senderId)
+        var chatExists = false
+        db.collection("converstaions").getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot, error == nil else {return}
+            let documentIDs = snapshot.documents.map({$0.documentID})
+            print(documentIDs)
+            if let documentIds = documentIDs as? [String] {
+                if documentIds.contains(where: {$0 == chatId01} ) {
+                    chatExists = true
+                    completionHandler(chatExists, chatId01)
+                } else if documentIds.contains(where: {$0 == chatId02} ) {
+                    chatExists = true
+                    completionHandler(chatExists, chatId02)
+                } else if documentIds.contains(where: {$0 == chatId} ) {
+                    chatExists = true
+                    completionHandler(chatExists, chatId)
+                } else {
+                    completionHandler(chatExists, "")
+                }
+            } else {
+                completionHandler(chatExists, "")
+            }
+        }
+        
+        
+    }
+    
+    
     
     
 }

@@ -53,6 +53,9 @@ public struct LatestMessageInChat: Hashable {
         SessionManager.currentUser?.name == senderName
     }
 }
+
+
+
 /*
 public struct FirestoreConversation: Codable, Identifiable, Hashable {
     @DocumentID public var id: String?
