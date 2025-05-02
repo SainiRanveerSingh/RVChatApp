@@ -195,7 +195,7 @@ class FirebaseHelper {
         let chatId01 = String(format: "%@:%@", senderId, receiverId)
         let chatId02 = String(format: "%@:%@", receiverId, senderId)
         var chatExists = false
-        db.collection("converstaions").getDocuments { querySnapshot, error in
+        db.collection("conversations").getDocuments { querySnapshot, error in
             guard let snapshot = querySnapshot, error == nil else {return}
             let documentIDs = snapshot.documents.map({$0.documentID})
             print(documentIDs)

@@ -69,7 +69,7 @@ class ChatViewModel: ObservableObject {
     func updateChatOnFirebase(chatId: String, messageData: Message) {
         //do {
         //_ = try db.collection("messages").addDocument(from: newMessage)
-        var refChatDB = self.db.collection("converstaions").document(chatId)//document(chatId).chi//getDocument()//.addDocument(from: newMessage)
+        var refChatDB = self.db.collection("conversations").document(chatId)//document(chatId).chi//getDocument()//.addDocument(from: newMessage)
         let currentTimestamp = getDateInMilliSeconds()
         var messageDataToSend : [AnyHashable : String] = [AnyHashable : String]()
         messageDataToSend.updateValue(messageData.id ?? "", forKey: "id")
@@ -120,7 +120,7 @@ class ChatViewModel: ObservableObject {
     }
     
     func updateConversationChat(chatId: String, messageData: Message) {
-        var refChatDB = self.db.collection("converstaions").document(chatId)
+        var refChatDB = self.db.collection("conversations").document(chatId)
         let currentTimestamp = getDateInMilliSeconds()
         
         var messageDataToSendSA : [String : Any] = [String : Any]()
@@ -143,6 +143,10 @@ class ChatViewModel: ObservableObject {
                 print(responseStatus.debugDescription.contains("Code=5"))
             }
         }
+    }
+    
+    func updateChatDetailsInUserProfiles() {
+        
     }
     
     /*
