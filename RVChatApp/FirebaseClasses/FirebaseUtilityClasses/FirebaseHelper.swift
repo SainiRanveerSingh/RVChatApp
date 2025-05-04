@@ -179,8 +179,12 @@ class FirebaseHelper {
                 Task {
                     await self.getUserNameFromDB(userId: strUserId) { status, nameValue in
                         //self.appUsers.append((userId:strUserId,strUserName:nameValue))
+                        let seconds = (Double.random(in: 1.0...9.0)/100)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                            // Put your code which should be executed with a delay here
+                            self.allAppUsers.append(AllAppUsers(userId: strUserId, strUserName: nameValue))
+                        }
                         
-                        self.allAppUsers.append(AllAppUsers(userId: strUserId, strUserName: nameValue))
                     }
                 }
             }

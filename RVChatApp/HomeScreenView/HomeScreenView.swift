@@ -13,7 +13,7 @@ struct HomeScreenView: View {
     @State var selectedTabType: String = "All User"
     
     //--
-    @State var selectedUser: AllAppUsers?
+    @State var selectedUser: AllAppUsers = AllAppUsers(userId: "", strUserName: "")
     @State var navigateToChat = false
     //--
     init() {
@@ -53,7 +53,11 @@ struct HomeScreenView: View {
                 List(viewModel.users, id: \.id) { userValue in
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
-                            Text(userValue.strUserName)
+                            if userValue.id == SessionManager.currentUserId {
+                                Text(String(format: "%@ (You)", userValue.strUserName))
+                            } else {
+                                Text(userValue.strUserName)
+                            }
                             Spacer()
                             Button(action: {
                                 selectedUser = userValue
@@ -76,8 +80,8 @@ struct HomeScreenView: View {
                 .listStyle(SidebarListStyle())
                 .background(
                     NavigationLink(
-                        destination: ChatView(receiverId: selectedUser?.id ?? "", userName: selectedUser?.strUserName ?? "")
-                            .navigationTitle(selectedUser?.strUserName ?? "User Chat"),
+                        destination: ChatView(receiverId: $selectedUser.id, userName: $selectedUser.strUserName)
+                            .navigationTitle(selectedUser.strUserName),
                         isActive: $navigateToChat,
                         label: { EmptyView() }
                     )

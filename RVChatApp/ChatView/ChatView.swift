@@ -11,9 +11,9 @@ struct ChatView: View {
     @Environment(\.presentationMode) var presentation
     @StateObject var chatViewModel = ChatViewModel()
     @State private var messageText = ""
-    var receiverId: String
-    var userName: String
-
+    @Binding var receiverId: String
+    @Binding var userName: String
+    
     var body: some View {
         VStack {
             ScrollView {
@@ -53,6 +53,12 @@ struct ChatView: View {
             }
             .padding()
         }
+        .onAppear() {
+            chatViewModel.receiverId = self.receiverId
+            if receiverId != "" {
+                chatViewModel.fetchMessagesForConversation()
+            }
+        }
         //.navigationBarBackButtonHidden(true)
         /*
         .navigationBarItems(trailing: Button("Logout") {
@@ -65,5 +71,5 @@ struct ChatView: View {
 }
 
 #Preview {
-    ChatView(receiverId: "123", userName: "User")
+    //ChatView(receiverId: "01", userName: "User")
 }
