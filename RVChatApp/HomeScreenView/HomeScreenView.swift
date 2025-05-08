@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeScreenView: View {
     @StateObject private var viewModel = HomeScreenViewModel()
     @Environment(\.presentationMode) var presentation
-    @State var selectedTabType: String = "All User"
+    //@State var selectedTabType: String = "All User"
     
     //--
     @State var selectedUser: AllAppUsers = AllAppUsers(userId: "", strUserName: "")
@@ -100,6 +100,8 @@ struct HomeScreenView: View {
                 self.presentation.wrappedValue.dismiss()
             })
             .onAppear {
+                viewModel.selectedTabType = "Recent Chat"
+                viewModel.loadRecentChat()
                 viewModel.fetchUsers()
             }
             
@@ -147,17 +149,22 @@ struct HomeScreenView: View {
            }
            .padding(5)
            .background(Color.white)
-           .onChange(of: selectedTabType) { newValue in
+           .onChange(of: viewModel.selectedTabType) { newValue in
                print("Selected tab: \(newValue)")
                DispatchQueue.main.async {
                    // Optional: Call API here
+                   if viewModel.selectedTabType == "All User" {
+                       viewModel.fetchUsers()
+                   } else {
+                       viewModel.loadRecentChat()
+                   }
                }
            }
        } //tab picker code ended
     
     @ViewBuilder
         private func tabButton(for tabType: String) -> some View {
-            if selectedTabType == tabType {
+            if viewModel.selectedTabType == tabType {
                 PickerSegmentView(text: tabType, isSelected: true)
                     .clipShape(Capsule())
                     .frame(maxWidth: .infinity)
@@ -166,7 +173,7 @@ struct HomeScreenView: View {
                     .clipShape(Capsule())
                     .onTapGesture {
                         withAnimation {
-                            selectedTabType = tabType
+                            viewModel.selectedTabType = tabType
                         }
                     }
                     .frame(maxWidth: .infinity)
