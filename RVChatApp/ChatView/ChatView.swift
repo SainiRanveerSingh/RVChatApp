@@ -63,49 +63,6 @@ struct ChatView: View {
                 .scrollIndicators(.hidden)
                 //----
                 
-                //--
-                /*
-                 ScrollView {
-                 VStack(alignment: .leading) {
-                 ForEach(chatViewModel.chatMessages, id: \.timestamp) { message in
-                 HStack {
-                 /*
-                  Spacer()
-                  Text(" Message: \(message.text)\n SenderId: \(message.senderId)\n receiverId: \(receiverId)")
-                  .padding()
-                  .background(Color.blue)
-                  .cornerRadius(10)
-                  .foregroundColor(.white)
-                  .padding(.trailing, 10)
-                  Spacer()
-                  */
-                 
-                 if message.senderId == SessionManager.currentUserId {
-                 Spacer()
-                 Text(" Message: \(message.text)\n SenderId: \(message.senderId)\n receiverId: \(receiverId)")
-                 .padding()
-                 .background(Color.blue)
-                 .cornerRadius(10)
-                 .foregroundColor(.white)
-                 .padding(.trailing, 10)
-                 } else {
-                 Text(" Message: \(message.text)\n SenderId: \(message.senderId)\n receiverId: \(receiverId)")
-                 .padding()
-                 .background(Color.gray)
-                 .cornerRadius(10)
-                 .foregroundColor(.white)
-                 .padding(.leading, 10)
-                 Spacer()
-                 }
-                 
-                 }
-                 }
-                 }
-                 
-                 }
-                 .padding()
-                 */
-                //--
                 HStack {
                     TextField("Type a message...", text: $messageText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())

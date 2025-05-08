@@ -88,16 +88,6 @@ class ChatViewModel: ObservableObject {
         let refChatDB = self.db.collection("conversations").document(chatId)
         
         let currentTimestamp = getDateInMilliSeconds()
-        /*
-        var messageDataToSend : [AnyHashable : String] = [AnyHashable : String]()
-        messageDataToSend.updateValue(messageData.id ?? "", forKey: "id")
-        messageDataToSend.updateValue(messageData.text, forKey: "text")
-        messageDataToSend.updateValue(messageData.senderId, forKey: "senderId")
-        messageDataToSend.updateValue("\(messageData.timestamp)", forKey: "timestamp")
-        messageDataToSend.updateValue(messageData.userName, forKey: "userName")
-        messageDataToSend.updateValue(messageData.receiverId, forKey: "receiverId")
-        messageDataToSend.updateValue(messageData.messageType.rawValue, forKey: "messageType")
-        */
         var messageDataToSendSA : [String : Any] = [String : Any]()
         messageDataToSendSA.updateValue(messageData.id ?? "", forKey: "id")
         messageDataToSendSA.updateValue(messageData.text, forKey: "text")
@@ -202,32 +192,18 @@ class ChatViewModel: ObservableObject {
     
     func fetchMessagesForConversation() {
         if receiverId != "" {
-        let ConversatonId = String(format: "%@:%@", SessionManager.currentUserId, receiverId)
-        FirebaseHelper.checkUserChatExists(chatId: ConversatonId, senderId: SessionManager.currentUserId, receiverId: receiverId) { status, chatId in
-            if status {
-                self.loadConversationData(chatId: chatId)
-            } else {
-                if chatId != "" {
+            let ConversatonId = String(format: "%@:%@", SessionManager.currentUserId, receiverId)
+            FirebaseHelper.checkUserChatExists(chatId: ConversatonId, senderId: SessionManager.currentUserId, receiverId: receiverId) { status, chatId in
+                if status {
                     self.loadConversationData(chatId: chatId)
+                } else {
+                    if chatId != "" {
+                        self.loadConversationData(chatId: chatId)
+                    }
                 }
             }
         }
-    }
         
-
-        /*
-        .order(by: "timestamp", descending: false)
-            .addSnapshotListener { snapshot, error in
-                guard let documents = snapshot?.documents else {
-                    print("Error fetching messages: \(error?.localizedDescription ?? "Unknown error")")
-                    return
-                }
-                
-                self.messages = documents.compactMap { doc in
-                    try? doc.data(as: Message.self)
-                }
-            }
-        */
     }
     
     func loadConversationData(chatId: String) {
