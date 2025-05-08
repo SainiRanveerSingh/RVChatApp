@@ -206,14 +206,18 @@ class FirebaseHelper {
             if let documentIds = documentIDs as? [String] {
                 if documentIds.contains(where: {$0 == chatId01} ) {
                     chatExists = true
+                    print("\nUserChatExists\nChat ID Used: \(chatId01)\n")
                     completionHandler(chatExists, chatId01)
                 } else if documentIds.contains(where: {$0 == chatId02} ) {
                     chatExists = true
+                    print("\nUserChatExists\nChat ID Used: \(chatId02)\n")
                     completionHandler(chatExists, chatId02)
                 } else if documentIds.contains(where: {$0 == chatId} ) {
                     chatExists = true
+                    print("\nUserChatExists\nChat ID Used: \(chatId)\n")
                     completionHandler(chatExists, chatId)
                 } else {
+                    print("\nUser Chat Doesn't Exists\nChat ID is: Blank\n")
                     completionHandler(chatExists, "")
                 }
             } else {

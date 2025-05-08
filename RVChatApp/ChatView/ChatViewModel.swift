@@ -11,10 +11,13 @@ import Combine
 
 class ChatViewModel: ObservableObject {
     @Published var messages: [Message] = []
+    @Published var chatMessages: [InChatMessage] = []
+    //InChatMessage
     private var db = Firestore.firestore()
     
     var receiverId: String = ""
     var userName: String = ""
+    var currentChatID = ""
     
     init() {
         fetchMessages()
@@ -22,9 +25,18 @@ class ChatViewModel: ObservableObject {
     }
     
     func sendMessage(text: String, receiverId: String, userName: String) {
-        let ConversatonId = String(format: "%@:%@", SessionManager.currentUserId, receiverId)
+        var ConversatonId = ""
+        if currentChatID != "" {
+            ConversatonId = currentChatID
+        } else {
+            ConversatonId = String(format: "%@:%@", SessionManager.currentUserId, receiverId)
+        }
         let newMessage = Message(id: ConversatonId,text: text, senderId: SessionManager.currentUserId, timestamp: Date(), userName: userName, receiverId: receiverId, messageType: .text)
-        self.addMessageToConversation(receiverId: receiverId, newMessage: newMessage)
+        
+        let listChatMessage = InChatMessage.init(id: ConversatonId, text: text, senderId: SessionManager.currentUserId, timestamp: Date(), receiverId: receiverId, messageType: .text)
+        chatMessages.append(listChatMessage)
+        
+        self.addMessageToConversation(chatId: ConversatonId, receiverId: receiverId, newMessage: newMessage)
         /*
         do {
             _ = try db.collection("messages").addDocument(from: newMessage)
@@ -48,20 +60,22 @@ class ChatViewModel: ObservableObject {
             }
     }
     
-    func addMessageToConversation(receiverId: String, newMessage: Message) {
-        FirebaseHelper.checkUserChatExists(chatId: "", senderId: SessionManager.currentUserId, receiverId: receiverId) { status, chatId in
+    func addMessageToConversation(chatId: String, receiverId: String, newMessage: Message) {
+        FirebaseHelper.checkUserChatExists(chatId: chatId, senderId: SessionManager.currentUserId, receiverId: receiverId) { status, chatId in
             let ConversatonId = String(format: "%@:%@", SessionManager.currentUserId, receiverId)
             if status {
                 //Conversation Exists! Use the same Converation ID
+                //print("addMessageToConversation: \nStatus:\(status)\nChatId Found:\(chatId)")
                 if chatId == "" {
-                    self.updateChatOnFirebase(chatId: chatId, messageData: newMessage)
-                } else {
+                    print("addMessageToConversation: else condition \nStatus:\(status)\nChatId Found:\(chatId)")
                     self.updateChatOnFirebase(chatId: ConversatonId, messageData: newMessage)
+                } else {
+                    print("addMessageToConversation: if condition \nStatus:\(status)\nChatId Found:\(chatId)")
+                    self.updateChatOnFirebase(chatId: chatId, messageData: newMessage)
                 }
             } else {
                 //Create new Conversation to Start the Chat
-                //let ConversatonId = String(format: "%@:%@", SessionManager.currentUserId, receiverId)
-                //FIRDatabase.database().reference().child("posts").child(imageName)
+                print("addMessageToConversation: \nCreating new Conversation to Start the Chat\nStatus:\(status)\nChatId Found:\(chatId)")
                 self.updateChatOnFirebase(chatId: ConversatonId, messageData: newMessage)
                 
             }
@@ -71,10 +85,10 @@ class ChatViewModel: ObservableObject {
     
     
     func updateChatOnFirebase(chatId: String, messageData: Message) {
-        //do {
-        //_ = try db.collection("messages").addDocument(from: newMessage)
-        var refChatDB = self.db.collection("conversations").document(chatId)//document(chatId).chi//getDocument()//.addDocument(from: newMessage)
+        let refChatDB = self.db.collection("conversations").document(chatId)
+        
         let currentTimestamp = getDateInMilliSeconds()
+        /*
         var messageDataToSend : [AnyHashable : String] = [AnyHashable : String]()
         messageDataToSend.updateValue(messageData.id ?? "", forKey: "id")
         messageDataToSend.updateValue(messageData.text, forKey: "text")
@@ -83,7 +97,7 @@ class ChatViewModel: ObservableObject {
         messageDataToSend.updateValue(messageData.userName, forKey: "userName")
         messageDataToSend.updateValue(messageData.receiverId, forKey: "receiverId")
         messageDataToSend.updateValue(messageData.messageType.rawValue, forKey: "messageType")
-        
+        */
         var messageDataToSendSA : [String : Any] = [String : Any]()
         messageDataToSendSA.updateValue(messageData.id ?? "", forKey: "id")
         messageDataToSendSA.updateValue(messageData.text, forKey: "text")
@@ -96,31 +110,19 @@ class ChatViewModel: ObservableObject {
         var messageWithTimestamptID : [String : Any] = [String : Any]()
         messageWithTimestamptID.updateValue(messageDataToSendSA, forKey: "\(currentTimestamp)")
         
-        refChatDB.updateData(messageDataToSend) { responseStatus in
+        
+        refChatDB.updateData(messageWithTimestamptID) { responseStatus in
             if responseStatus == nil {
                 print("Data Added Successfully !!!")
-                self.updateConversationChat(chatId: chatId, messageData: messageData)
+                //self.updateConversationChat(chatId: chatId, messageData: messageData)
+                self.updateChatDetailsInUserProfiles(chatId: chatId, messageData: messageData)
             } else {
                 print(responseStatus.debugDescription.contains("Code=5"))
                 if (responseStatus.debugDescription.contains("Code=5")) {
                     self.updateConversationChat(chatId: chatId, messageData: messageData)
-                    /*
-                     refChatDB.setData(messageDataToSendSA, merge: true) { responseStatus in
-                     if responseStatus == nil {
-                     print("Data Added Successfully !!!")
-                     } else {
-                     print(responseStatus.debugDescription.contains("Code=5"))
-                     }
-                     }
-                     */
                 }
             }
-        }//addDocument(data: messageData)//updateData(currentTimestamp: messageData)
-        /*
-         } catch {
-         print("Error sending message: \(error.localizedDescription)")
-         }
-         */
+        }
     }
     
     func updateConversationChat(chatId: String, messageData: Message) {
@@ -233,12 +235,26 @@ class ChatViewModel: ObservableObject {
             if error == nil {
                 if let conversations = allConversation?.data(){
                     if conversations.count > 0 {
-                        let sortedDict = conversations.sorted(by: { $0.key < $1.key })
-                        
+                        let sortedDict = conversations.sorted(by: { $0.key > $1.key })
+                        if let data = conversations as? [String:[String:Message]] {
+                            print(data)
+                        } else if let data = conversations as? [String:[String:Any]] {
+                            print(data)
+                        }
                         //--
                         var allChatMessages = [Message]()
+                        var allInChatMessage = [InChatMessage]()
                         for dict in sortedDict {
                             print(dict.value)
+                            if let docValue = (dict.value) as? Message {
+                                /*
+                                if let docValueMessageId = docValue.id {
+                                    print(docValueMessageId)
+                                }
+                                */
+                            }
+                            
+                            
                             if let chatDict = dict.value as? Dictionary<String, String> {
                                 //--
                                 let formatter = DateFormatter()
@@ -251,7 +267,24 @@ class ChatViewModel: ObservableObject {
                                     chatDate = date
                                 }
                                 //--
-                                let chatMessage = Message(id: chatDict["id"],
+                                let documentIDWrapper = DocumentID<String>(wrappedValue: chatDict["id"])
+                                var chatId = ""
+                                /*
+                                if let documentID = documentIDWrapper.wrappedValue {
+                                    print("Document ID: \(documentID)")
+                                    chatId = String(format: "%@", documentID)
+                                }
+                                */
+                                if let dataDict = dict.value as? [String: String] {
+                                    print(dataDict)
+                                    print(dataDict["id"] ?? "")
+                                    if let userChatId = dataDict["id"] {
+                                        chatId = userChatId
+                                        self.currentChatID = userChatId
+                                    }
+                                }
+                                //--
+                                let chatMessage = Message(id: chatId,
                                                           text: chatDict["text"] ?? "",
                                                           senderId: chatDict["senderId"] ?? "",
                                                           timestamp: chatDate,
@@ -260,49 +293,28 @@ class ChatViewModel: ObservableObject {
                                                           messageType: MessageType(rawValue: chatDict["messageType"]!) ?? .text)
                                 
                                 allChatMessages.append(chatMessage)
-                            }
-                            
-                            /*
-                            if let FBDict = dict.value as? Dictionary<String, String> {
-                                print(FBDict)
-                            do {
-                                let jsonData = try JSONSerialization.data(withJSONObject: FBDict)
-                                //let chatMessage = try JSONDecoder().decode(Message.self, from: jsonData)
-                                let dbRef = Firestore.firestore().collection("conversations")
-                                let docRef = dbRef.document(chatId)
-                                let chatMessage = try Firestore.Decoder().decode(Message.self, from: FBDict, in: docRef)
                                 
-                                print("Name: \(chatMessage.text), Age: \(chatMessage.userName)")
-                                allChatMessages.append(chatMessage)
-                            } catch {
-                                print("Error decoding JSON: \(error)")
+                                
+                                
+                                let inChatMsg = InChatMessage(id: chatId,
+                                                              text: chatDict["text"] ?? "",
+                                                              senderId: chatDict["senderId"] ?? "",
+                                                              timestamp: chatDate,
+                                                              receiverId: chatDict["receiverId"] ?? "",
+                                                              messageType: MessageType(rawValue: chatDict["messageType"]!) ?? .text)
+                                
+                                allInChatMessage.append(inChatMsg)
                             }
-                        }
-                            */
                         }
                         
                         self.messages = allChatMessages
-                        //--
-                        /*
-                        do {
-                            let jsonData = try JSONSerialization.data(withJSONObject: sortedDict)
-                            let chatMessages = try JSONDecoder().decode([Message].self, from: jsonData)
-                            
-                            for chatMessage in chatMessages {
-                                print("Name: \(chatMessage.text), Age: \(chatMessage.userName)")
-                            }
-                            self.messages = chatMessages
-                        } catch {
-                            print("Error decoding JSON: \(error)")
-                        }
-                        */
-                        //--
+                        self.chatMessages = allInChatMessage
                         
                     }
                     print(conversations)
                 }
             } else {
-                
+                print("Error in loading mesasges: \(error?.localizedDescription)")
             }
         })
     }
